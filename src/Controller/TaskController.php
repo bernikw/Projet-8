@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TaskController extends AbstractController
 {
@@ -23,7 +24,7 @@ class TaskController extends AbstractController
     
     #[Route(path:'/tasks/create', name: 'app_task_create')]
      
-    public function create(Request $request, EntityManagerInterface $entityManager)
+    public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -32,12 +33,14 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
         
+            $task->setSlug($slugger->slug($task->getTitle()));
+            $task->setUser($this->getUser());
             $entityManager->persist($task);
             $entityManager->flush();
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('app_task_list');
         }
 
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
@@ -59,7 +62,7 @@ class TaskController extends AbstractController
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
-            return $this->redirectToRoute('task_list');
+            return $this->redirectToRoute('app_task_list');
         }
 
         return $this->render('task/edit.html.twig', [
@@ -92,6 +95,6 @@ class TaskController extends AbstractController
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
-        return $this->redirectToRoute('task_list');
+        return $this->redirectToRoute('app_task_list');
     }
 }
