@@ -40,6 +40,7 @@ class Task
     {
         $this->createdAt = new DateTimeImmutable();
         $this->isDone = false;
+
     }
 
     public function getId(): ?int
@@ -83,12 +84,12 @@ class Task
         return $this;
     }
 
-    public function isDone(): ?bool
+    public function getIsDone(): ?bool
     {
         return $this->isDone;
     }
 
-    public function setDone(bool $isDone): self
+    public function setIsDone(bool $isDone): self
     {
         $this->isDone = $isDone;
 
