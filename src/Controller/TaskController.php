@@ -18,12 +18,19 @@ class TaskController extends AbstractController
     public function list(TaskRepository $repository): Response
     {
         return $this->render('task/list.html.twig', [
-            'tasks' =>  $repository->findBy(['isDone'=>0]),
+            'tasks' =>  $repository->findBy(['isDone' => 0]),
         ]);
     }
-    
-    #[Route(path:'/tasks/create', name: 'app_task_create')]
-     
+
+
+    #[Route(path: '/tasks/completed', name: 'app_task_completed')]
+    public function listClosed(TaskRepository $repository)
+    {
+        return $this->render('task/listCompleted.html.twig', ['tasks' => $repository->findBy(['isDone'=>1])]);
+    }
+
+    #[Route(path: '/tasks/create', name: 'app_task_create')]
+
     public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger)
     {
         $task = new Task();
@@ -32,7 +39,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-        
+
             $task->setSlug($slugger->slug($task->getTitle()));
             $task->setUser($this->getUser());
             $entityManager->persist($task);
@@ -46,9 +53,9 @@ class TaskController extends AbstractController
         return $this->render('task/create.html.twig', ['form' => $form->createView()]);
     }
 
-    
-     #[Route(path:'/tasks/{id}/edit', name:'app_task_edit')]
-     
+
+    #[Route(path: '/tasks/{id}/edit', name: 'app_task_edit')]
+
     public function edit(Task $task, Request $request, EntityManagerInterface $entityManager)
     {
         $form = $this->createForm(TaskType::class, $task);
@@ -56,7 +63,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-          
+
             $entityManager->persist($task);
             $entityManager->flush();
 
@@ -71,25 +78,25 @@ class TaskController extends AbstractController
         ]);
     }
 
-  
-     #[Route(path:'/tasks/{id}/toggle', name:'app_task_toggle')]
-   
+
+    #[Route(path: '/tasks/{id}/toggle', name: 'app_task_toggle')]
+
     public function toggleTask(Task $task, EntityManagerInterface $entityManager)
     {
-        $task->toggle(!$task->isDone());
+        $task->toggle(!$task->getIsDone());
         $entityManager->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
-        return $this->redirectToRoute('task_list');
+        return $this->redirectToRoute('app_task_list');
     }
 
-    
-     #[Route(path:'/tasks/{id}/delete', name:'app_task_delete')]
-    
+
+    #[Route(path: '/tasks/{id}/delete', name: 'app_task_delete')]
+
     public function deleteTaskAction(Task $task, EntityManagerInterface $entityManager)
     {
-       
+
         $entityManager->remove($task);
         $entityManager->flush();
 
