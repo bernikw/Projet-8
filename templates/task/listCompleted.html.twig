@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">
+{% endblock %}
+
+{% block body %}
+	<div class="back-link">
+		<a href={{ path('app_task_list') }} class="btn btn-info">Retour à la liste des tâches à réaliser</a>
+	</li>
+</div>
+
+<div class="row row-cols-3 row-cols-sm-1 g-3">
+	{% for task in tasks %}
+		<div class="col">
+			<div class="card shadow-sm">
+				<div class="card-body">
+					<h2 class="task-list-title">
+						<a href="{{ path('app_task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
+					</h2>
+					<div class="row">
+						<div class="col text-start">
+							<p class="text-muted">Créée par , le
+								{{ task.createdAt|date("d/m/Y à H:i:s") }}
+							</p>
+						</div>
+						<div class="col icons text-end">
+							<a href="{{ path('app_task_toggle', {'id' : task.id }) }}" class="btn btn-secondary btn-sm pull-right">Marquer comme non faite</a>
+							{% if app.user %}
+								<a href="{{ path('app_task_delete', {'id' : task.id }) }}" onclick="return confirm('Etes-vous sûr(e) de vouloir supprimer cette tâche?')" class="btn btn-danger btn-sm pull-right">Supprimer</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	{% else %}
+		<div class="alert alert-warning" role="alert">
+			Il n'y a pas encore de tâche enregistrée.
+			<a href="{{ path('app_task_create') }}" class="btn btn-warning pull-right">Créer une tâche</a>
+		</div>
+	{% endfor %}
+</div>{% endblock %}
