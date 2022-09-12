@@ -19,14 +19,22 @@
 					</h2>
 					<div class="row">
 						<div class="col text-start">
-							<p class="text-muted">Créée par , le
+							<p class="text-muted">Créée par {{ task.user.username }}, le
 								{{ task.createdAt|date("d/m/Y à H:i:s") }}
-							</p>
+							</p>	
 						</div>
+						<p class="card-text"> {{ task.content }} </p>
+
 						<div class="col icons text-end">
+							{% if is_granted ("TASK_EDIT" , task ) %}
+							{% if app.user  %}
 							<a href="{{ path('app_task_toggle', {'id' : task.id }) }}" class="btn btn-secondary btn-sm pull-right">Marquer comme non faite</a>
-							{% if app.user %}
+							{% endif %}
+							{% endif %}
+							{% if is_granted ("TASK_DELETE" , task ) %}
+							{% if app.user  %}
 								<a href="{{ path('app_task_delete', {'id' : task.id }) }}" onclick="return confirm('Etes-vous sûr(e) de vouloir supprimer cette tâche?')" class="btn btn-danger btn-sm pull-right">Supprimer</a>
+							{% endif %}
 							{% endif %}
 						</div>
 					</div>

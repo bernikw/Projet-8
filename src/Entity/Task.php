@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
-use App\Entity\Trait\SlugTrait;
+use Assert\NotBlank;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\Trait\SlugTrait;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TaskRepository;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -23,17 +26,18 @@ class Task
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un titre')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Assert\NotBlank(message: 'Veuillez saisir un contenu')]
     private ?string $content = null;
 
     #[ORM\Column]
     private ?bool $isDone = null;
 
-   
-
-    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
+    #[JoinColumn(nullable: false)]
     private ?User $user = null;
 
     public function __construct()
