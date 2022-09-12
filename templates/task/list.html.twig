@@ -12,29 +12,33 @@
 			<a href="{{ path('app_task_completed') }}" class="btn btn-info">Consulter la liste des tâches terminées</a>
 		</div>
 	</div>
-	<div class="row row-cols-3 row-cols-lg-1 g-3">
-		{% for task in tasks %}
-			<div class="col">
-				<div class="card shadow-sm">
+	<div class="row justify-content-around">
+		{% for task in tasks %}			
+				<div class="card" style="width: 22rem;">
 					<div class="card-body">
-						<h2 class="task-list-title">
-							<a href="{{ path('app_task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
+						<h2 class="task-title">
+							<a href="{{ path('app_task_edit', {'id' : task.id }) }}">{{ task.title }}</a>						
 						</h2>
 						<div class="row">
 							<div class="col text-start">
-								<p class="text-muted">Créée par , le
+								<p class="text-muted">Créée par {{ task.user.username }}, le
 									{{ task.createdAt|date("d/m/Y à H:i:s") }}
-								</p>
+								</p>		
+							</div>
+							<div>
+								<p class="card-text"> {{ task.content }} </p>
 							</div>
 							<div class="col icons text-end">
+							{% if is_granted ("TASK_EDIT" , task ) %}
 								<a href="{{ path('app_task_toggle', {'id' : task.id }) }}" class="btn btn-success btn-sm pull-right">Marquer comme faite</a>
-								{% if app.user %}
+								{% endif %}
+								{% if is_granted ("TASK_DELETE" , task ) %}
 									<a href="{{ path('app_task_delete', {'id' : task.id }) }}" onclick="return confirm('Etes-vous sûr(e) de vouloir supprimer cette tâche?')" class="btn btn-danger btn-sm pull-right">Supprimer</a>
 								{% endif %}
 							</div>
 						</div>
 					</div>
-				</div>
+				
 			</div>
 
 		{% else %}

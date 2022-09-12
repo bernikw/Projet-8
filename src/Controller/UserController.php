@@ -9,25 +9,29 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
     #[Route('/users', name: 'app_user_list')]
+    #[IsGranted ('ROLE_ADMIN')]
     public function list(UserRepository $repository): Response
     {
+        
+        $this->isGranted('ROLE_ADMIN', $this->getUser());
         return $this->render('user/list.html.twig', [
             'users' => $repository->findAll(),
         ]);
     }
 
     
-    #[Route(path:'/users/create', name: "app_user_create")]
-     
+    #[Route(path:'/users/create', name: "app_user_create")] 
     public function create(Request $request, UserPasswordHasherInterface $hash, 
     EntityManagerInterface $entityManager)
     {
+        
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
 
@@ -52,33 +56,38 @@ class UserController extends AbstractController
     }
 
     #[Route(path:'/users/{id}/edit', name: 'app_user_edit')]
-     
-    public function edit(User $user, Request $request, UserPasswordHasherInterface $hash,
-    EntityManagerInterface $entityManager )
+    public function edit(User $user, 
+    EntityManagerInterface $entityManager ): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser());
+        
 
-        $form->handleRequest($request);
+          if($user->getRoles(['ROLE_USER'])) 
+          {
+             $user->setRoles(['ROLE_ADMIN']);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $password = $hash->hashPassword($user, $user->getPassword());
-            $user->setPassword($password);
-
+          } 
+          
+          if ($user->getRoles(['ROLE_ADMIN']) )
+          {
+            $user->setRoles(['ROLE_USER']);
+           
+          }         
+       
             $entityManager->persist($user);
             $entityManager->flush();
             
-            $this->addFlash('success', "L'utilisateur a bien été modifié");
+            $this->addFlash('success', "Le rôle a été changé");
 
             return $this->redirectToRoute('app_user_list');
-        }
-
-        return $this->render('user/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
+        
+       
     }
 
     #[Route(path:'/users/{id}/delete', name: 'app_user_delete')]
-
     public function delete(User $user, EntityManagerInterface $entityManager){
 
+        $this->denyAccessUnlessGranted('ROLE_ADMIN', $this->getUser());
         $entityManager->remove($user);
         $entityManager->flush();
 

@@ -17,8 +17,9 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks', name: 'app_task_list')]
     public function list(TaskRepository $repository): Response
     {
+        
         return $this->render('task/list.html.twig', [
-            'tasks' =>  $repository->findBy(['isDone' => 0]),
+            'tasks' =>  $repository->findBy(['user' => $this->getUser(),'isDone'=> 0]),
         ]);
     }
 
@@ -26,15 +27,16 @@ class TaskController extends AbstractController
     #[Route(path: '/tasks/completed', name: 'app_task_completed')]
     public function listClosed(TaskRepository $repository)
     {
-        return $this->render('task/listCompleted.html.twig', ['tasks' => $repository->findBy(['isDone'=>1])]);
+       
+        return $this->render('task/listCompleted.html.twig', ['tasks' => $repository->findBy(['user' => $this->getUser(),'isDone'=>1 ])]);
     }
 
     #[Route(path: '/tasks/create', name: 'app_task_create')]
-
     public function create(Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
+        
 
         $form->handleRequest($request);
 
@@ -55,9 +57,9 @@ class TaskController extends AbstractController
 
 
     #[Route(path: '/tasks/{id}/edit', name: 'app_task_edit')]
-
     public function edit(Task $task, Request $request, EntityManagerInterface $entityManager)
     {
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task); 
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -80,9 +82,9 @@ class TaskController extends AbstractController
 
 
     #[Route(path: '/tasks/{id}/toggle', name: 'app_task_toggle')]
-
     public function toggleTask(Task $task, EntityManagerInterface $entityManager)
     {
+        $this->denyAccessUnlessGranted('TASK_EDIT', $task);     
         $task->toggle(!$task->getIsDone());
         $entityManager->flush();
 
@@ -93,10 +95,10 @@ class TaskController extends AbstractController
 
 
     #[Route(path: '/tasks/{id}/delete', name: 'app_task_delete')]
-
     public function deleteTaskAction(Task $task, EntityManagerInterface $entityManager)
     {
-
+    
+        $this->denyAccessUnlessGranted('TASK_DELETE', $task);
         $entityManager->remove($task);
         $entityManager->flush();
 

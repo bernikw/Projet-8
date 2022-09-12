@@ -38,6 +38,7 @@
 
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				{% if app.user %}
 					<li class="nav-item">
 						<a class="btn btn-outline-success" href="{{ path('app_task_create') }}">Créer une nouvelle tâche</a>
 					</li>
@@ -47,11 +48,16 @@
 					<li class="nav-item">
 						<a class="btn btn-outline-secondary" href="{{ path('app_task_completed') }}">La liste des tâches terminées</a>
 					</li>
+					{% endif %}
+
+					{% if app.user %}
+					{% else %}
 					<li class="nav-item">
 						<a class="btn btn-outline-info" href="{{ path('app_user_create') }}">Créer un utilisateur</a>
 					</li>
+					{% endif %}
 
-					{% if is_granted("ROLE_ADMIN") %}
+					{% if is_granted ('ROLE_ADMIN') %}
 						<li class="nav-item">
 							<a class="btn btn-outline-secondary" href="{{ path('app_user_list') }}">Consulter la liste des utilisateurs</a>
 						</li>
