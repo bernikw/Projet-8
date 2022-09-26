@@ -4,21 +4,16 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 
- body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+
+/* Main style */
+li 
+{
+    list-style: none;
 }
 
-.slide-image {
-    width: 100%;
-}
-
-.carousel-holder {
-    margin-bottom: 30px;
-}
-
-.carousel-control,
-.item {
-    border-radius: 4px;
+.back-link 
+{
+    margin-bottom: 10px;
 }
 
 .caption {
@@ -26,29 +21,87 @@
     overflow: hidden;
 }
 
-.caption h4 {
+.caption h4 
+{
     white-space: nowrap;
 }
 
-.thumbnail img {
+.thumbnail img 
+{
     width: 100%;
 }
 
-.ratings {
+.ratings 
+{
     padding-right: 10px;
     padding-left: 10px;
     color: #d17581;
 }
 
-.thumbnail {
+.thumbnail 
+{
     padding: 0;
 }
 
-.thumbnail .caption-full {
+.thumbnail .caption-full 
+{
     padding: 9px;
     color: #333;
 }
 
-footer {
+/* Header style */
+.slide-image 
+{
+    width: 100%;
+}
+
+.carousel-holder 
+{
+    margin-bottom: 30px;
+}
+
+.carousel-control,
+.item 
+{
+    border-radius: 4px;
+}
+
+/* Navbar style */
+.navbar 
+{
+    background-color: #e3f2fd;
+    margin-bottom: 10px;
+}
+
+.nav 
+{
+    color: #22252a;
+}
+
+.nav-link:hover 
+{
+    color: #43d2f2;
+  
+}
+
+.navbar-toggler {
+    color: #22252a;
+}
+
+/* footer */
+footer 
+{
     margin: 50px 0;
+  
+}
+
+/* form style */
+.btn-form 
+{
+    margin: 5px 0;
+}
+
+.btn 
+{
+    margin-bottom: 15px;
 }

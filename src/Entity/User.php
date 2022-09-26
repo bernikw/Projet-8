@@ -44,6 +44,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Veuillez saisir un mot de passe')]
     #[Assert\Regex(
         pattern: '^(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z]).{8,}$^',
         message: 'Le mot de passe doit contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial !',

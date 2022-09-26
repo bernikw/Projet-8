@@ -20,7 +20,6 @@ Installation of To Do List requires:
 - Doctrine/ORM 
 - Bootstrap 5.2
 
-
 ## Installation
 
 1. On your local machine, create a local repository and make a
@@ -39,6 +38,29 @@ symfony console doctrine:migration:migrate
 
 5. Fill the database with fixtures:
 symfony console doctrine:fixtures:load
+
+## Features
+
+If the user is the author of the task is authenticate:
+
+- Get list of tasks to do of author
+- Get list of tasks done of author
+- Get the details of a task
+- Edit a task
+- Mark a task as done
+- Delete a task 
+
+The admin can also:
+
+- Delete user
+- Delete unassigned tasks
+
+Run the tests: In your terminal, run vendor/bin/phpunit
+
+
+## Contributions
+
+If you want to contribute to this project and make it better, your help is very welcome. Look [the documentation](https://github.com/bernikw/Projet-8#contributing) to see how contribute.
 
 
 

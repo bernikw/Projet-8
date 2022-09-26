@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Repository\UserRepository;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,11 +16,19 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class TaskController extends AbstractController
 {
     #[Route(path: '/tasks', name: 'app_task_list')]
-    public function list(TaskRepository $repository): Response
+    public function list(TaskRepository $repository, UserRepository $userRepo): Response
     {
+        $user = $this->getUser();
+        $findUser[] = $user;
+        if($user->getRoles()[0] === 'ROLE_ADMIN')
+        {
+             $userAnonyme = $userRepo->find(14);
+             $findUser[] = $userAnonyme;
+        }
+       
         
         return $this->render('task/list.html.twig', [
-            'tasks' =>  $repository->findBy(['user' => $this->getUser(),'isDone'=> 0]),
+            'tasks' =>  $repository->findBy(['user' => $findUser,'isDone'=> 0]),
         ]);
     }
 

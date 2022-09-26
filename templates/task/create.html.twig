@@ -6,11 +6,11 @@
         <div class"col">
             <div class="col-lg-8">
             
-        <h1 class="text-center h3 mb-3 font-weight-normal">Créer une nouvelle tâche</h1> 
+        <h1 class="text-center h3 mb-3 font-weight-normal" style="color: #45637d; margin-top: 20px">Créer une nouvelle tâche</h1> 
     
         {{ form_start(form, {'action' : path('app_task_create')}) }}
             {{ form_widget(form) }}
-
+        
             <button type="submit" class="btn btn-success pull-right btn-form">Ajouter</button>
         {{ form_end(form) }}
 
