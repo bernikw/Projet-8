@@ -56,6 +56,23 @@ class AppFixtures extends Fixture
 
         //tasks
 
+        for ($l = 1; $l <= 5; $l++){
+            $task = new Task;
+            $task->setCreatedAt(new DateTimeImmutable());
+            $task->setTitle('Task');
+            $task->setContent('Donec tellus est, sodales quis semper a, 
+            cursus ut massa. Curabitur at laoreet mauris. 
+            In auctor quis libero eu consectetur. Cras tincidunt ullamcorper est at porta.
+            Sed faucibus tristique cursus. Proin faucibus iaculis ipsum, sed pellentesque augue. 
+            Maecenas a varius sem, vel molestie justo. Lorem ipsum dolor sit amet, consectetur 
+            adipiscing elit. Nulla at ullamcorper massa, sit amet bibendum sem.');
+            $task->setIsDone(false);
+            $task->setSlug($task->getTitle());
+            $task->setUser($user1); 
+            $manager->persist($task);
+            
+        }
+
         for ($i = 1; $i <= 5; $i++){
             $task1 = new Task;
             $task1->setCreatedAt(new DateTimeImmutable());
@@ -68,7 +85,8 @@ class AppFixtures extends Fixture
             adipiscing elit. Nulla at ullamcorper massa, sit amet bibendum sem.');
             $task1->setIsDone(false);
             $task1->setSlug($task1->getTitle());
-            $task1->setUser($user2);            $manager->persist($task1);    
+            $task1->setUser($user2);            
+            $manager->persist($task1);    
 
         } 
 

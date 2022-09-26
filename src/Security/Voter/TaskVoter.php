@@ -40,13 +40,8 @@ class TaskVoter extends Voter
         } 
         
 
-        if(null === $task->getUser()) return false;
+        if(null === $task->getUser()) return false;       
 
-        if ($task->getUser()->getUsername() === "anonyme" && $this->security->isGranted('ROLE_ADMIN')) {
-    
-            return true;
-       
-        }
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
 
@@ -68,13 +63,24 @@ class TaskVoter extends Voter
     }
 
     private function canEdit(Task $task, User $user){
+ 
 
+        if ($task->getUser()->getUsername() === "anonyme" && $this->security->isGranted('ROLE_ADMIN'))
+        {
+            return false;
+        }
+        
         return $user === $task->getUser();
 
     }
 
     private function canDelete(Task $task, User $user){
 
+        if ($task->getUser()->getUsername() === "anonyme" && $this->security->isGranted('ROLE_ADMIN')) {
+    
+            return true;
+       
+        }
  
         return $user === $task->getUser(); 
    

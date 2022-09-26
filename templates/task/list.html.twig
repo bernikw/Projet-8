@@ -17,7 +17,9 @@
 				<div class="card" style="width: 22rem;">
 					<div class="card-body">
 						<h2 class="task-title">
-							<a href="{{ path('app_task_edit', {'id' : task.id }) }}">{{ task.title }}</a>						
+						{% if is_granted ("TASK_EDIT" , task ) %}
+							<a href="{{ path('app_task_edit', {'id' : task.id }) }}">{{ task.title }}</a>
+							{% endif %}						
 						</h2>
 						<div class="row">
 							<div class="col text-start">
